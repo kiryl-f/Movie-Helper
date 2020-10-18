@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        app:key="log_out"
+        app:summary="Log out"
+        app:icon="@drawable/ic_baseline_exit_to_app_24"
+        />
+    <ListPreference
+        app:key="language"
+        android:summary="Language"
+        android:icon="@drawable/ic_baseline_language_24"
+        android:entries="@array/languages"
+        android:entryValues="@array/languages"
+
+        />
+    <SwitchPreference
+        app:key="theme"
+        android:summary="Dark Theme"
+        android:icon="@drawable/ic_baseline_brightness_4_24"
+        />
+
+</PreferenceScreen>

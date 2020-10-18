@@ -1,0 +1,104 @@
+<resources>
+    <string name="app_name">ReccomendAMovie</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="get_a_movie">Выбрать фильмы</string>
+    <string name="country">Страна</string>
+    <string name="rating">Рейтинг</string>
+    <string name="pick_rating">Выбрать рейтинг</string>
+    <string name="min_year">Мин. год</string>
+    <string name="max_year">Макс. год</string>
+    <string name="genre">Жанр</string>
+    <string name="find_movies">Найти фильмы</string>
+    <string name="next_to_watch">Буду смотреть</string>
+    <string name="enter_name">Выберите имя</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="no_connection">Проверьте подключение к интернету</string>
+    <string name="log_in">Войти</string>
+    <string name="register">Создать аккаунт</string>
+    <string name="password">Пароль</string>
+    <string name="remember_me">Запомнить меня</string>
+    <string name="settings">Настройки</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="no_movie_to_watch">Тут пока пусто</string>
+    <string name="will_watch">Буду смотреть</string>
+    <string name="skip">Пропустить</string>
+    <string name="movies">Фильмы</string>
+    <string name="get_movies">Найти фильмы</string>
+    <string name="search">Поиск</string>
+    <string name="no_movies_found">Фильмы не найдены</string>
+    <string name="exit">Выход</string>
+    <string name="filter">Фильтры</string>
+    <string name="back">Назад</string>
+    <string name="sort">Упорядочить</string>
+    <string name="alph_sort_1">По алфавиту (по возрастанию)</string>
+    <string name="date_sort_1">По дате добавления (по возрастанию)</string>
+    <string name="rating_sort_1">По рейтингу (по возрастанию)</string>
+    <string name="year_sort_1">По году выпуска (по возрастанию)</string>
+    <string name="alph_sort_2">По алфавиту (по убыванию)</string>
+    <string name="date_sort_2">По дате добавления (по убыванию)</string>
+    <string name="rating_sort_2">По рейтингу (по убыванию)</string>
+    <string name="year_sort_2">По году выпуска(по убыванию)</string>
+
+
+    <string name="drama">Драма</string>
+    <string name="comedy">Комедия</string>
+    <string name="action">Боевик</string>
+    <string name="horror">Ужасы</string>
+    <string name="thriller">Триллер</string>
+    <string name="music">Мюзикл</string>
+    <string name="western">Вестерн</string>
+    <string name="sci_fi">Фантастика</string>
+    <string name="animation">Мультфильм</string>
+    <string name="romance">Мелодрама</string>
+    <string name="adventure">Приключения</string>
+    <string name="crime">Криминал</string>
+    <string name="documentary">Документальный</string>
+    <string name="family">Семейный</string>
+    <string name="history">Исторический</string>
+    <string name="fantasy">Фэнтэзи</string>
+    <string name="mystery">Детектив</string>
+    <string name="war">Военный</string>
+
+    <string name="usa">США</string>
+    <string name="UK">Соединенное королевство</string>
+    <string name="south_korea">Южная Корея</string>
+    <string name="russia">Россия</string>
+    <string name="france">Франция</string>
+    <string name="italy">Италия</string>
+    <string name="spain">Испания</string>
+    <string name="germany">Германия</string>
+
+    <string name="watched">Уже смотрел</string>
+
+    <string name="changes_accepted">Все изменеия будут приняты после перезапуска приложения</string>
+
+    <string name="set_spec">Здесь вы можете отфильтровать поиск фильмов</string>
+    <string name="list_liked">Здесь вы найдёте список фильмов, которые вы захотели посмотреть</string>
+    <string name="click_to_see_desc">Кликните на фильм, чтобы увидеть его краткое описание</string>
+    <string name="swide_desc">Свайпните в левый верхний угол, если фильм вас заинтересовал\n Свайпните в левый нижний угол, если вы уже смотрели этот фильм\n
+    Свайпните в право(в любой угол), если вы хотите посмотреть этот фильм</string>
+    <string name="username_symbols">Имя не должно содержать следующие символы: \'#\', \'.\', \']\', \'[\' or \'$\'</string>
+    <string name="password_length"><![CDATA[Длина пароля дожна быть больше 0]]></string>
+    <string name="user_exists">Такой пользователь уже существует</string>
+    <string name="user_or_pw_incorrect">Неверное имя пользователся или пароль</string>
+
+
+</resources>

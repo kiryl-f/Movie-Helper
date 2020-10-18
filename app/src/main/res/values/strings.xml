@@ -1,0 +1,105 @@
+<resources>
+    <string name="app_name">ReccomendAMovie</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="get_a_movie">Get a movie</string>
+    <string name="country">country</string>
+    <string name="rating">rating</string>
+    <string name="pick_rating">pick rating</string>
+    <string name="min_year">Min year</string>
+    <string name="max_year">Max year</string>
+    <string name="genre">genre</string>
+    <string name="find_movies">Find movies</string>
+    <string name="next_to_watch">Next to watch</string>
+    <string name="enter_name">Choose your user name</string>
+    <string name="confirm">Confirm</string>
+    <string name="no_connection">Please check your internet connection</string>
+    <string name="log_in">Log In</string>
+    <string name="register">Create an acount</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="no_movie_to_watch">No movies to watch</string>
+    <string name="will_watch">Will watch</string>
+    <string name="skip">Skip</string>
+    <string name="movies">Movies</string>
+    <string name="get_movies">Get movies</string>
+    <string name="search">Search</string>
+    <string name="no_movies_found">No movies found</string>
+    <string name="exit">Exit</string>
+    <string name="filter">Filter</string>
+    <string name="back">Back</string>
+    <string name="sort">Sort</string>
+    <string name="alph_sort_1">Alphabet (ascending)</string>
+    <string name="date_sort_1">Date (ascending)</string>
+    <string name="rating_sort_1">Rating (ascending)</string>
+    <string name="year_sort_1">Year(ascending)</string>
+    <string name="alph_sort_2">Alphabet (descending)</string>
+    <string name="date_sort_2">Date (descending)</string>
+    <string name="rating_sort_2">Rating (descending)</string>
+    <string name="year_sort_2">Year(descending)</string>
+
+    <string name="drama">Drama</string>
+    <string name="comedy">Comedy</string>
+    <string name="action">Action</string>
+    <string name="horror">Horror</string>
+    <string name="thriller">Thriller</string>
+    <string name="music">Music</string>
+    <string name="western">Western</string>
+    <string name="sci_fi">Science Fiction</string>
+    <string name="animation">Animation</string>
+    <string name="romance">Romance</string>
+    <string name="adventure">Adventure</string>
+    <string name="crime">Crime</string>
+    <string name="documentary">Documentary</string>
+    <string name="family">Family</string>
+    <string name="history">History</string>
+    <string name="fantasy">Fantasy</string>
+    <string name="mystery">Mystery</string>
+    <string name="war">War</string>
+
+    <string name="usa">United States of America</string>
+    <string name="UK">United Kingdom</string>
+    <string name="south_korea">South Korea</string>
+    <string name="russia">Russia</string>
+    <string name="france">France</string>
+    <string name="italy">Italy</string>
+    <string name="spain">Spain</string>
+    <string name="germany">Germany</string>
+
+
+    <string name="watched">Aleady watched</string>
+    <string name="changes_accepted">All changes will be accepted when app is restarted</string>
+    <string name="set_spec">Here you can set specifications for movies you\'re looking for</string>
+    <string name="list_liked">Here\'s the list of movies you liked</string>
+    <string name="click_to_see_desc">Click on the movie card to see it\'s short description</string>
+    <string name="swide_desc">Swipe left-up, if you don\'t want to watch this movie\n Swipe left-down, if you already watched this movie\n Swipe right in any direction, if
+    you wan\'t to watch this movie</string>
+    <string name="username_symbols">Username should not contain \'#\', \'.\', \']\', \'[\' or \'$\' symbols</string>
+    <string name="password_length"><![CDATA[Password\'s length must be > 0]]></string>
+    <string name="user_exists">Such user already exists</string>
+    <string name="user_or_pw_incorrect">Username or password is incorrect</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+    </string-array>
+</resources>
