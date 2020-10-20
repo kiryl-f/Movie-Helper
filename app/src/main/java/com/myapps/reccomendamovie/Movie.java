@@ -1,5 +1,7 @@
 package com.myapps.reccomendamovie;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -151,10 +153,6 @@ public class Movie implements Comparable<Movie> {
 
     public boolean equalToMovie(Movie movie) {
 
-        if(!this.getLanguage().equals(" ")){
-            return movie.getLanguage().equals(this.getLanguage());
-        }
-        
         if(this.getGenre1() != 0) {
            if(!(movie.getGenre1() == this.getGenre1() || movie.getGenre1() == this.getGenre2() || movie.getGenre1() == this.getGenre3())) {
                return false;
@@ -162,10 +160,17 @@ public class Movie implements Comparable<Movie> {
         }
 
         if(this.getYear() != 0) {
-            if(movie.getYear() < this.getYear()) {
+            Log.d("years", "" + this.getYear() + ',' + movie.getYear());
+            if(this.getYear() > movie.getYear()) {
                 return false;
             }
         }
-        return false;
+
+        if(!this.getLanguage().equals(" ")){
+            return this.getLanguage().equals(movie.getLanguage());
+        }
+
+
+        return true;
     }
 }

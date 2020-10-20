@@ -1,5 +1,6 @@
 package com.myapps.reccomendamovie;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -21,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MovieCardAdapter extends ArrayAdapter<Movie> {
 
@@ -42,6 +44,7 @@ public class MovieCardAdapter extends ArrayAdapter<Movie> {
         return movies.get(position);
     }
 
+    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public View getView(final int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
@@ -62,15 +65,15 @@ public class MovieCardAdapter extends ArrayAdapter<Movie> {
             }
         }).into(((ImageView)convertView.findViewById(R.id.posterImageView)));
 
-        ((TextView)convertView.findViewById(R.id.titleTextView)).setText(getItem(position).getTitle());
+        ((TextView)convertView.findViewById(R.id.titleTextView)).setText(Objects.requireNonNull(getItem(position)).getTitle());
         ((TextView)convertView.findViewById(R.id.yearTextView)).setText("" + getItem(position).getYear());
 
         String genre = "";
-        genre += Character.toUpperCase(getItem(position).getGenres().get(0).charAt(0));
-        genre += getItem(position).getGenres().get(0).substring(1);
+        genre += Character.toUpperCase(Objects.requireNonNull(getItem(position)).getGenres().get(0).charAt(0));
+        genre += Objects.requireNonNull(getItem(position)).getGenres().get(0).substring(1);
         ((TextView)convertView.findViewById(R.id.genreTextView)).setText(genre);
 
-        double rating = getItem(position).getRating();
+        double rating = Objects.requireNonNull(getItem(position)).getRating();
         if(rating < 5.0) {
             ((TextView)convertView.findViewById(R.id.ratingTextView)).setTextColor(Color.RED);
         } else if(rating >= 5.0 && rating <= 7.0) {

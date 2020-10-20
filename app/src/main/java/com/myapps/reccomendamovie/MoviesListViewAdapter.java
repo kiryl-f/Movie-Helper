@@ -182,9 +182,10 @@ public class MoviesListViewAdapter extends BaseAdapter {
                                 .getString("name", "")).child(movies.get(position).getTitle() + " ");
         reference.removeValue();
 
-        createSnackbar(view);
         movies.remove(position);
         notifyDataSetChanged();
+        
+        createSnackbar(view);
     }
 
     private void createSnackbar(View view) {

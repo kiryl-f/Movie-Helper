@@ -99,6 +99,7 @@
     <string name="password_length"><![CDATA[Длина пароля дожна быть больше 0]]></string>
     <string name="user_exists">Такой пользователь уже существует</string>
     <string name="user_or_pw_incorrect">Неверное имя пользователся или пароль</string>
+    <string name="not_selected">Не выбрано</string>
 
 
 </resources>

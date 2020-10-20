@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayDeque <Movie> swipedMovies = new ArrayDeque<>();
 
-    HashMap <String, Integer> genreMap, langMap;
+    HashMap <String, Integer> genreMap;
 
     private void setGenreMap() {
         genreMap = new HashMap<String, Integer>() {
@@ -107,18 +108,6 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private void setLanguageMap() {
-        genreMap = new HashMap<String, Integer>() {
-            {
-                put("en", 1);
-                put("ru", 2);
-                put("es", 3);
-                put("it", 4);
-                put("ko", 5);
-                put("de", 6);
-            }
-        };
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
         setChoosenTheme();
 
         setGenreMap();
-
-        setLanguageMap();
 
         url = "https://api.themoviedb.org/3/movie/top_rated?api_key=33d65e0ed0777308653502b72db75fd0&language=ru-RU&region=RU&page=";
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -208,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding.undoImageView.setOnClickListener(v -> {
             if(moviesReady) {
+                binding.filmText.setVisibility(View.GONE);
+                binding.filmImage.setVisibility(View.GONE);
                 undo();
             }
         });
@@ -264,11 +253,17 @@ public class MainActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int c = 0;
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
                     Movie movie = dataSnapshot.getValue(Movie.class);
-                    movies.add(movie);
+                    if(movie != null && movie.getRating() != 0.0 && movie.getTitle().length() > 0) {
+                        movies.add(movie);
+                    } else {
+                        c++;
+                    }
+
                     Log.d("movies", movie.toString());
-                }
+                }Toast.makeText(MainActivity.this, "" + c, Toast.LENGTH_SHORT).show();
                 binding.progressBar.setVisibility(View.INVISIBLE);
                 binding.swipeStack.setVisibility(View.VISIBLE);
                 binding.filmText.setVisibility(View.VISIBLE);
@@ -433,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void discarded(int mIndex, int direction) {
-                if(mIndex == binding.swipeStack.getAdapter().getCount()-1) {
+                if(mIndex == binding.swipeStack.getAdapter().getCount()) {
                     binding.filmText.setVisibility(View.VISIBLE);
                     binding.filmImage.setVisibility(View.VISIBLE);
                 } else {
@@ -442,11 +437,15 @@ public class MainActivity extends AppCompatActivity {
                     if(direction == 1 || direction == 3) {
                         saveFilmToFirebase(movie);
                     } else if(direction == 2) {
+
                         filmWatched(movie);
                     }
+                    Log.d("swipes", movie.toString());
                     swipedMovies.addLast(movie);
                     if(swipedMovies.size() > 0) {
                         binding.undoImageView.setImageResource(R.drawable.ic_baseline_undo_24);
+                        binding.undoImageView.setClickable(true);
+                        binding.undoImageView.setEnabled(true);
                     }
                 }
             }
@@ -485,7 +484,6 @@ public class MainActivity extends AppCompatActivity {
         for(Movie movie:movies) {
             adapter.add(movie);
         }
-
         adapter.setMovies(movies);
         binding.swipeStack.setAdapter(adapter);
 
@@ -496,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
 
         Movie movie = new Movie();
         movie.setGenre1(specifications.genre);
-        movie.setLanguage(languageMap.get(specifications.country));
+        movie.setLanguage(specifications.language);
         movie.setYear(specifications.minYear);
 
         for(Movie curMovie:movies) {
@@ -510,30 +508,18 @@ public class MainActivity extends AppCompatActivity {
             binding.filmText.setVisibility(View.VISIBLE);
             binding.swipeStack.setVisibility(View.GONE);
             binding.filmText.setText(R.string.no_movies_found);
+            Toast.makeText(this, "Nothing found", Toast.LENGTH_SHORT).show();
         } else {
             binding.filmImage.setVisibility(View.GONE);
             binding.filmText.setVisibility(View.GONE);
             binding.swipeStack.setVisibility(View.VISIBLE);
-        }
-        setSwipe(correctMovies);
-        setSwipeListener();
-    }
-
-    private boolean movieIsCorrect(Movie movie, Specifications specifications) {
-        if(!specifications.language.equals(" ")) {
-            if(langMap.get(movie.getLanguage()) != langMap.get(specifications.language)) {
-                return false;
+            Toast.makeText(this, "" + correctMovies, Toast.LENGTH_SHORT).show();
+            if(binding.swipeStack.getAdapter() != null) {
+                binding.swipeStack.getAdapter().clear();
             }
+            setSwipe(correctMovies);
+            setSwipeListener();
         }
-        if(specifications.genre != -1) {
-            if(movie.getGenre1() != specifications.genre && movie.getGenre2() != specifications.genre && movie.getGenre3() != specifications.genre) {
-                return false;
-            }
-        }
-        if(specifications.minYear != 0) {
-            return movie.getYear() >= specifications.minYear;
-        }
-        return true;
     }
 
     @Override
@@ -622,20 +608,26 @@ public class MainActivity extends AppCompatActivity {
 
             binding.countrySpinner.setSpinnerList(countries);
             binding.countrySpinner.addOnItemChoosenListener((s, i) -> {
-                activity.specifications.country = s;
-                activity.specifications.language = activity.languageMap.get(s);
+                if(i != -1) {
+                    activity.specifications.country = s;
+                    activity.specifications.language = activity.languageMap.get(s);
+                } else {
+                    activity.specifications.country = " ";
+                    activity.specifications.language = " ";
+                }
                 valuesSet[0] = true;
             });
 
             ArrayList <String> genres =
-                    new ArrayList<>(Arrays.asList(getString(R.string.drama)
-                            , getString(R.string.thriller), getString(R.string.comedy), getString(R.string.action), getString(R.string.horror)
-                            , getString(R.string.music)));
+                    new ArrayList<>(Arrays.asList(getString(R.string.drama), getString(R.string.history)
+                            , getString(R.string.thriller), getString(R.string.comedy), getString(R.string.action), getString(R.string.horror), getString(R.string.music), getString(R.string.war), getString(R.string.western), getString(R.string.sci_fi)));
             binding.genreSpinner.setSpinnerList(genres);
             binding.genreSpinner.addOnItemChoosenListener(new SpinnerListener() {
                 @Override
                 public void onItemChoosen(String s, int i) {
-                    activity.specifications.genre = genreMap.get(s);
+                    if(i != -1) {
+                        activity.specifications.genre = genreMap.get(s);
+                    }
                     valuesSet[1] = true;
                 }
             });
@@ -649,8 +641,13 @@ public class MainActivity extends AppCompatActivity {
             });
 
             binding.confirmButton.setOnClickListener(v -> {
+                activity.swipedMovies.clear();
+                activity.binding.undoImageView.setEnabled(false);
+                activity.binding.undoImageView.setClickable(false);
+                activity.binding.undoImageView.setImageResource(R.drawable.ic_baseline_undo_transparent_24);
                 MainActivity activity = (MainActivity)getActivity();
                 Objects.requireNonNull(activity).findMovie();
+                this.dismiss();
             });
         }
     }

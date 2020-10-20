@@ -20,7 +20,7 @@
         android:textColor="@android:color/black"
         android:layout_alignParentStart="true"
         android:layout_marginTop="5dp"
-        android:text="Country"
+        android:text="@string/country"
         android:textSize="20sp"
         android:layout_marginStart="10dp"
         />
@@ -42,7 +42,7 @@
         android:layout_below="@id/countrySpinner"
         android:textColor="@android:color/black"
         android:layout_alignParentStart="true"
-        android:text="Genres"
+        android:text="@string/genre"
         android:textSize="20sp"
         android:layout_marginStart="10dp"
         />
@@ -58,7 +58,7 @@
         android:layout_alignStart="@id/genreSpinner"
         android:layout_marginBottom="3dp"
         android:layout_alignEnd="@id/countrySpinner"
-        app:nb_text="1994"
+        app:nb_text="@string/not_selected"
         />
 
     <TextView
@@ -68,7 +68,7 @@
         android:textColor="@android:color/black"
         android:layout_below="@id/genreSpinner"
         android:layout_alignParentStart="true"
-        android:text="Min year"
+        android:text="@string/min_year"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
