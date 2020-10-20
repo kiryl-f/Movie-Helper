@@ -25,6 +25,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.ceylonlabs.imageviewpopup.ImagePopup;
+import com.dmallcott.dismissibleimageview.DismissibleImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -140,7 +141,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         imagePopup.setImageOnClickClose(true);  // Optional
 
         imagePopup.initiatePopupWithGlide(movie.getPosterPath());
-        holder.poster.setOnClickListener(v13 -> imagePopup.viewPopup());
+
         return v;
     }
 
@@ -189,7 +190,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
     }
 
     private void createSnackbar(View view) {
-        Snackbar.make(view, "1 movie was deleted", Snackbar.LENGTH_LONG).setAction("Undo", v -> undo()).show();
+        Snackbar.make(view, R.string.movie_deleted, Snackbar.LENGTH_LONG).setAction(R.string.undo, v -> undo()).show();
     }
 
     private void undo() {
@@ -202,7 +203,8 @@ public class MoviesListViewAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView poster, delete, share;
+        DismissibleImageView poster;
+        ImageView delete, share;
         TextView title, year, genre, country, rating;
         RelativeLayout layout;
         ProgressBar progressBar;

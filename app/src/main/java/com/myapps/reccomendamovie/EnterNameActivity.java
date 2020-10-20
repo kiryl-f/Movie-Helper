@@ -93,7 +93,7 @@ public class EnterNameActivity extends AppCompatActivity {
                 .setIntent(new Intent(EnterNameActivity.this, MainActivity.class).setAction(Intent.ACTION_VIEW));
         ShortcutInfo.Builder nextToWatchShortcut = new ShortcutInfo.Builder(this, "to_watch")
                 .setShortLabel(getString(R.string.next_to_watch))
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_baseline_local_movies_24))
+                .setIcon(Icon.createWithResource(this, R.drawable.ic_baseline_local_movies_black))
                 .setIntent(new Intent(EnterNameActivity.this, MainActivity.class).setAction(Intent.ACTION_VIEW).putExtra("start_ntw", true));
         Objects.requireNonNull(shortcutManager).setDynamicShortcuts(Arrays.asList(mainShortcut.build(), nextToWatchShortcut.build()));
 
@@ -138,7 +138,7 @@ public class EnterNameActivity extends AppCompatActivity {
     }
 
     private void makeToast(String text) {
-        FancyToast.makeText(this,text, FancyToast.LENGTH_SHORT, FancyToast.INFO, true).show();
+        FancyToast.makeText(this,text, FancyToast.LENGTH_SHORT, FancyToast.INFO, false).show();
         setAllViewsEnabled(true);
     }
 

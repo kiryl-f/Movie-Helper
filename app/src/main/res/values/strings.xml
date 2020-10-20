@@ -98,6 +98,11 @@
     <string name="user_exists">Such user already exists</string>
     <string name="user_or_pw_incorrect">Username or password is incorrect</string>
     <string name="not_selected">Not selected</string>
+    <string name="movie_deleted">1 movie was deleted</string>
+    <string name="undo">Undo</string>
+    <string name="language">Language</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="log_out">Log out</string>
 
     <string-array name="languages">
         <item>English</item>

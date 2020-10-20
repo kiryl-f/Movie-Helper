@@ -3,12 +3,12 @@
 
     <Preference
         app:key="log_out"
-        app:summary="Log out"
+        app:summary="@string/log_out"
         app:icon="@drawable/ic_baseline_exit_to_app_24"
         />
     <ListPreference
         app:key="language"
-        android:summary="Language"
+        android:summary="@string/language"
         android:icon="@drawable/ic_baseline_language_24"
         android:entries="@array/languages"
         android:entryValues="@array/languages"
@@ -16,7 +16,7 @@
         />
     <SwitchPreference
         app:key="theme"
-        android:summary="Dark Theme"
+        android:summary="@string/dark_theme"
         android:icon="@drawable/ic_baseline_brightness_4_24"
         />
 

@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     Log.d("movies", movie.toString());
-                }Toast.makeText(MainActivity.this, "" + c, Toast.LENGTH_SHORT).show();
+                }
                 binding.progressBar.setVisibility(View.INVISIBLE);
                 binding.swipeStack.setVisibility(View.VISIBLE);
                 binding.filmText.setVisibility(View.VISIBLE);
@@ -508,12 +508,10 @@ public class MainActivity extends AppCompatActivity {
             binding.filmText.setVisibility(View.VISIBLE);
             binding.swipeStack.setVisibility(View.GONE);
             binding.filmText.setText(R.string.no_movies_found);
-            Toast.makeText(this, "Nothing found", Toast.LENGTH_SHORT).show();
         } else {
             binding.filmImage.setVisibility(View.GONE);
             binding.filmText.setVisibility(View.GONE);
             binding.swipeStack.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "" + correctMovies, Toast.LENGTH_SHORT).show();
             if(binding.swipeStack.getAdapter() != null) {
                 binding.swipeStack.getAdapter().clear();
             }

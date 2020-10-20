@@ -101,5 +101,12 @@
     <string name="user_or_pw_incorrect">Неверное имя пользователся или пароль</string>
     <string name="not_selected">Не выбрано</string>
 
+    <string name="movie_deleted">1 фильм был удален</string>
+    <string name="undo">Отмена</string>
+
+    <string name="language">Язык</string>
+    <string name="dark_theme">Темная Тема</string>
+    <string name="log_out">Выйти</string>
+
 
 </resources>
