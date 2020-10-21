@@ -108,5 +108,8 @@
     <string name="dark_theme">Темная Тема</string>
     <string name="log_out">Выйти</string>
 
+    <string name="or">или</string>
+    <string name="get_random_movies">Случайные фильмы</string>
+
 
 </resources>

@@ -103,6 +103,8 @@
     <string name="language">Language</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="log_out">Log out</string>
+    <string name="or">or</string>
+    <string name="get_random_movies">Get random movies</string>
 
     <string-array name="languages">
         <item>English</item>

@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -35,7 +35,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.myapps.reccomendamovie.databinding.ActivityMainBinding;
 import com.myapps.reccomendamovie.databinding.MovieAttributesDialogBinding;
-import com.sayantan.advancedspinner.SpinnerListener;
 import com.wenchao.cardstack.CardStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -489,7 +488,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void findMovie() {
+    public void findMovie(int sortMode) {
         ArrayList <Movie> correctMovies = new ArrayList<>();
 
         Movie movie = new Movie();
@@ -502,7 +501,20 @@ public class MainActivity extends AppCompatActivity {
                 correctMovies.add(curMovie);
             }
         }
-        Collections.shuffle(correctMovies);
+        if(sortMode == -1) {
+            Collections.shuffle(correctMovies);
+        } else if(sortMode == 0) {
+            Collections.sort(correctMovies, (o1, o2) -> {
+                if(o1.getRating() < o2.getRating()) {
+                    return 1;
+                } else if(o1.getRating() > o2.getRating()) {
+                    return -1;
+                }
+                return 0;
+            });
+        } else {
+            Collections.sort(movies, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+        }
         if(correctMovies.size() == 0) {
             binding.filmImage.setVisibility(View.VISIBLE);
             binding.filmText.setVisibility(View.VISIBLE);
@@ -620,15 +632,14 @@ public class MainActivity extends AppCompatActivity {
                     new ArrayList<>(Arrays.asList(getString(R.string.drama), getString(R.string.history)
                             , getString(R.string.thriller), getString(R.string.comedy), getString(R.string.action), getString(R.string.horror), getString(R.string.music), getString(R.string.war), getString(R.string.western), getString(R.string.sci_fi)));
             binding.genreSpinner.setSpinnerList(genres);
-            binding.genreSpinner.addOnItemChoosenListener(new SpinnerListener() {
-                @Override
-                public void onItemChoosen(String s, int i) {
-                    if(i != -1) {
-                        activity.specifications.genre = genreMap.get(s);
-                    }
-                    valuesSet[1] = true;
+            binding.genreSpinner.addOnItemChoosenListener((s, i) -> {
+                if(i != -1) {
+                    activity.specifications.genre = genreMap.get(s);
                 }
+                valuesSet[1] = true;
             });
+
+            ArrayList <String> sortBy = new ArrayList<>(Arrays.asList(getString(R.string.rating_sort_1), getString(R.string.alph_sort_1)));
 
             binding.minYearButton.setOnClickListener(v -> {
                 NumberPickerDialog dialog = new NumberPickerDialog(getContext(), 1950, 2019, value -> {
@@ -638,16 +649,36 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             });
 
+            binding.sortSpinner.setSpinnerList(sortBy);
+
             binding.confirmButton.setOnClickListener(v -> {
+                Toast.makeText(activity, "" + binding.sortSpinner.getSelected(), Toast.LENGTH_SHORT).show();
                 activity.swipedMovies.clear();
                 activity.binding.undoImageView.setEnabled(false);
                 activity.binding.undoImageView.setClickable(false);
                 activity.binding.undoImageView.setImageResource(R.drawable.ic_baseline_undo_transparent_24);
                 MainActivity activity = (MainActivity)getActivity();
-                Objects.requireNonNull(activity).findMovie();
+
+                Objects.requireNonNull(activity).findMovie(binding.sortSpinner.getSelected());
+                this.dismiss();
+            });
+
+            binding.getRandomButton.setOnClickListener(v -> {
+                activity.specifications.country = " ";
+                activity.specifications.genre = 0;
+                activity.specifications.language = " ";
+                activity.specifications.minYear = 0;
+
+                activity.swipedMovies.clear();
+                activity.binding.undoImageView.setEnabled(false);
+                activity.binding.undoImageView.setClickable(false);
+                activity.binding.undoImageView.setImageResource(R.drawable.ic_baseline_undo_transparent_24);
+                MainActivity activity = (MainActivity)getActivity();
+                Objects.requireNonNull(activity).findMovie(-1);
                 this.dismiss();
             });
         }
+
     }
 
     @SuppressLint("StaticFieldLeak")
