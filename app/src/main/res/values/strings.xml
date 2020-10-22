@@ -105,6 +105,9 @@
     <string name="log_out">Log out</string>
     <string name="or">or</string>
     <string name="get_random_movies">Get random movies</string>
+    <string name="any_country">Any country</string>
+    <string name="any_genre">Any genre</string>
+    <string name="random_order">In random order</string>
 
     <string-array name="languages">
         <item>English</item>

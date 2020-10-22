@@ -231,7 +231,7 @@ public class NextToWatchActivity extends AppCompatActivity {
 
         DatabaseReference reference
                 = FirebaseDatabase.getInstance().getReference().child("Users")
-                .child(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("name", ""));
+                .child(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("name", "")).child("to_watch");
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -9,42 +9,17 @@
         android:id="@+id/countrySpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/countryTextView"
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
-        />
-    <TextView
-        android:id="@+id/countryTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:text="@string/country"
-        android:textSize="20sp"
-        android:layout_marginStart="10dp"
         />
 
     <com.sayantan.advancedspinner.SingleSpinner
         android:id="@+id/genreSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/genresTextView"
         android:layout_marginTop="10dp"
         android:layout_below="@id/countrySpinner"
         android:layout_alignStart="@id/countrySpinner"
-        />
-    <TextView
-        android:id="@+id/genresTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/countrySpinner"
-        android:textColor="@android:color/black"
-        android:layout_alignParentStart="true"
-        android:text="@string/genre"
-        android:textSize="20sp"
-        android:layout_marginStart="10dp"
         />
 
     <com.ornach.nobobutton.NoboButton
@@ -58,39 +33,14 @@
         android:layout_alignStart="@id/genreSpinner"
         android:layout_marginBottom="3dp"
         android:layout_alignEnd="@id/countrySpinner"
-        app:nb_text="@string/not_selected"
+        app:nb_text="@string/min_year"
         />
 
-    <TextView
-        android:id="@+id/yearTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_below="@id/genreSpinner"
-        android:layout_alignParentStart="true"
-        android:text="@string/min_year"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        />
 
-    <TextView
-        android:id="@+id/sortTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:layout_below="@id/minYearButton"
-        android:layout_alignParentStart="true"
-        android:text="@string/sort"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        />
     <com.sayantan.advancedspinner.SingleSpinner
         android:id="@+id/sortSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/genresTextView"
         android:layout_marginTop="10dp"
         android:layout_below="@id/minYearButton"
         android:layout_alignStart="@id/countrySpinner"
@@ -100,10 +50,10 @@
         android:id="@+id/confirmButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/sortTextView"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
+        android:layout_below="@id/sortSpinner"
         app:nb_radius="10dp"
         app:nb_backgroundColor="@android:color/black"
         app:nb_textColor="@android:color/white"
@@ -135,7 +85,7 @@
         app:nb_textColor="@android:color/white"
         app:nb_textSize="15sp"
         app:nb_text="@string/get_random_movies"
+        android:layout_marginBottom="30dp"
         />
-
 
 </RelativeLayout>

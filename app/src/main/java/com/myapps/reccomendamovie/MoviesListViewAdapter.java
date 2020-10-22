@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,8 +182,10 @@ public class MoviesListViewAdapter extends BaseAdapter {
                         .getReference()
                         .child("Users")
                         .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                                .getString("name", "")).child(movies.get(position).getTitle() + " ");
-        reference.removeValue();
+                                .getString("name", "")).child("to_watch");
+        Log.d("adapter", movies.get(position).getTitle());
+        reference.child(movies.get(position).getTitle()).removeValue();
+        reference.child(movies.get(position).getTitle() + " ").removeValue();
 
         movies.remove(position);
         notifyDataSetChanged();
@@ -191,13 +194,16 @@ public class MoviesListViewAdapter extends BaseAdapter {
     }
 
     private void createSnackbar(View view) {
-        Snackbar.make(view, R.string.movie_deleted, Snackbar.LENGTH_LONG).setAction(R.string.undo, v -> undo()).show();
+        Snackbar.make(view, R.string.movie_deleted, Snackbar.LENGTH_LONG).setAction(R.string.undo, v ->  {
+            Log.d("adapter", "undo");
+            undo();
+        }).show();
     }
 
     private void undo() {
         FirebaseDatabase.getInstance().getReference().child("Users")
                 .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                        .getString("name", "")).child(lastMovie.getTitle()).setValue(lastMovie);
+                        .getString("name", "")).child("to_watch").child(lastMovie.getTitle()).setValue(lastMovie);
 
         movies.add(lastMovie);
         this.notifyDataSetChanged();

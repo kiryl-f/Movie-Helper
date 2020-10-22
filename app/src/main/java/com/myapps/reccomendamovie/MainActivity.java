@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -298,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
                         .getReference()
                         .child("Users")
                         .child(this.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                                .getString("name", "")).child(swipedMovies.getLast().getTitle() + " ");
+                                .getString("name", "")).child("to_watch").child(swipedMovies.getLast().getTitle() + " ");
         reference.removeValue();
         reference = FirebaseDatabase.getInstance()
                         .getReference()
@@ -458,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveFilmToFirebase(final Movie movie) {
         movie.setTitle(getRefactoredString(movie.getTitle()));
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(getName()).child(getRefactoredString(movie.getTitle()));
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(getName()).child("to_watch").child(getRefactoredString(movie.getTitle()));
         reference.setValue(movie);
     }
 
@@ -501,9 +500,9 @@ public class MainActivity extends AppCompatActivity {
                 correctMovies.add(curMovie);
             }
         }
-        if(sortMode == -1) {
+        if(sortMode < 1) {
             Collections.shuffle(correctMovies);
-        } else if(sortMode == 0) {
+        } else if(sortMode == 1) {
             Collections.sort(correctMovies, (o1, o2) -> {
                 if(o1.getRating() < o2.getRating()) {
                     return 1;
@@ -612,15 +611,22 @@ public class MainActivity extends AppCompatActivity {
             };
 
             ArrayList <String> countries
-                    = new ArrayList<>(Arrays.asList(getString(R.string.usa),
+                    = new ArrayList<>(Arrays.asList(getString(R.string.any_country),getString(R.string.usa),
                     getString(R.string.russia), getString(R.string.france)
                     ,getString(R.string.italy), getString(R.string.spain), getString(R.string.germany), getString(R.string.south_korea)));
 
+            binding.countrySpinner.setSpinnerTitle(getString(R.string.country));
             binding.countrySpinner.setSpinnerList(countries);
+            binding.countrySpinner.setSelected(0);
             binding.countrySpinner.addOnItemChoosenListener((s, i) -> {
                 if(i != -1) {
-                    activity.specifications.country = s;
-                    activity.specifications.language = activity.languageMap.get(s);
+                    if(!s.equals(getString(R.string.any_country))) {
+                        activity.specifications.country = s;
+                        activity.specifications.language = activity.languageMap.get(s);
+                    } else {
+                        activity.specifications.country = " ";
+                        activity.specifications.language = " ";
+                    }
                 } else {
                     activity.specifications.country = " ";
                     activity.specifications.language = " ";
@@ -629,17 +635,26 @@ public class MainActivity extends AppCompatActivity {
             });
 
             ArrayList <String> genres =
-                    new ArrayList<>(Arrays.asList(getString(R.string.drama), getString(R.string.history)
+                    new ArrayList<>(Arrays.asList(getString(R.string.any_genre),getString(R.string.drama), getString(R.string.history)
                             , getString(R.string.thriller), getString(R.string.comedy), getString(R.string.action), getString(R.string.horror), getString(R.string.music), getString(R.string.war), getString(R.string.western), getString(R.string.sci_fi)));
+
+            binding.genreSpinner.setSpinnerTitle(getString(R.string.genre));
             binding.genreSpinner.setSpinnerList(genres);
+            binding.genreSpinner.setSelected(0);
             binding.genreSpinner.addOnItemChoosenListener((s, i) -> {
                 if(i != -1) {
-                    activity.specifications.genre = genreMap.get(s);
+                    if(!s.equals(getString(R.string.any_genre))) {
+                        activity.specifications.genre = genreMap.get(s);
+                    } else {
+                        activity.specifications.genre = 0;
+                    }
+                } else {
+                    activity.specifications.genre = 0;
                 }
                 valuesSet[1] = true;
             });
 
-            ArrayList <String> sortBy = new ArrayList<>(Arrays.asList(getString(R.string.rating_sort_1), getString(R.string.alph_sort_1)));
+            ArrayList <String> sortBy = new ArrayList<>(Arrays.asList(getString(R.string.random_order),getString(R.string.rating_sort_1), getString(R.string.alph_sort_1)));
 
             binding.minYearButton.setOnClickListener(v -> {
                 NumberPickerDialog dialog = new NumberPickerDialog(getContext(), 1950, 2019, value -> {
@@ -650,9 +665,10 @@ public class MainActivity extends AppCompatActivity {
             });
 
             binding.sortSpinner.setSpinnerList(sortBy);
+            binding.sortSpinner.setSelected(0);
+            binding.sortSpinner.setSpinnerTitle(getString(R.string.sort));
 
             binding.confirmButton.setOnClickListener(v -> {
-                Toast.makeText(activity, "" + binding.sortSpinner.getSelected(), Toast.LENGTH_SHORT).show();
                 activity.swipedMovies.clear();
                 activity.binding.undoImageView.setEnabled(false);
                 activity.binding.undoImageView.setClickable(false);

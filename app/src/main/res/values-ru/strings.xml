@@ -21,7 +21,7 @@
     <string name="password">Пароль</string>
     <string name="remember_me">Запомнить меня</string>
     <string name="settings">Настройки</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Настройки</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -110,6 +110,9 @@
 
     <string name="or">или</string>
     <string name="get_random_movies">Случайные фильмы</string>
+    <string name="any_country">Любая страна</string>
+    <string name="any_genre">Любой жанр</string>
+    <string name="random_order">В случайном порядке</string>
 
 
 </resources>
