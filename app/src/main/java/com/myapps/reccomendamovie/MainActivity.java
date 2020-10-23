@@ -251,16 +251,11 @@ public class MainActivity extends AppCompatActivity {
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int c = 0;
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
                     Movie movie = dataSnapshot.getValue(Movie.class);
                     if(movie != null && movie.getRating() != 0.0 && movie.getTitle().length() > 0) {
                         movies.add(movie);
-                    } else {
-                        c++;
                     }
-
-                    Log.d("movies", movie.toString());
                 }
                 binding.progressBar.setVisibility(View.INVISIBLE);
                 binding.swipeStack.setVisibility(View.VISIBLE);
@@ -268,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.filmImage.setVisibility(View.VISIBLE);
                 moviesReady = true;
 
-                //findMovie();
+                findMovie(0);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

@@ -8,10 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -187,8 +190,17 @@ public class MoviesListViewAdapter extends BaseAdapter {
         reference.child(movies.get(position).getTitle()).removeValue();
         reference.child(movies.get(position).getTitle() + " ").removeValue();
 
-        movies.remove(position);
-        notifyDataSetChanged();
+        final Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
+        view.startAnimation(animation);
+        Handler handle = new Handler();
+        handle.postDelayed(() -> {
+            movies.remove(position);
+            notifyDataSetChanged();
+            animation.cancel();
+        }, 300);
+
+        //movies.remove(position);
+        //notifyDataSetChanged();
         
         createSnackbar(view);
     }
