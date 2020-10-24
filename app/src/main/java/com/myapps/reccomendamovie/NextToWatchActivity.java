@@ -37,6 +37,8 @@ public class NextToWatchActivity extends AppCompatActivity {
     SearchView searchView;
     private boolean moviesReady = false;
 
+    String mode = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +69,13 @@ public class NextToWatchActivity extends AppCompatActivity {
             return false;
         });
 
-        getDataFromFirebase();
+        Intent intent = getIntent();
+        mode = intent.getStringExtra("mode");
+        if(Objects.equals(mode, "watched")) {
+            setTitle(R.string.watched1);
+        }
 
+        getDataFromFirebase();
 
     }
 
@@ -102,57 +109,46 @@ public class NextToWatchActivity extends AppCompatActivity {
         } else if(item.getItemId() == R.id.settingsItem) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if(item.getItemId() == R.id.sortItem) {
-            createSortDialog();
+            if(moviesReady) {
+                createSortDialog();
+            }
+        } else {
+            if(moviesReady) {
+                Collections.reverse(movies);
+                setRecView(movies, "");
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void createSortDialog() {
         RadioGroup group = new RadioGroup(this);
-        RadioButton sortByDateButton = new RadioButton(this), sortByAlphButton = new RadioButton(this), sortByRatingButton = new RadioButton(this),
-        sortByDateDescendingButton = new RadioButton(this), sortByAlphDescendingButton = new RadioButton(this), sortByRatingDescendingButton = new RadioButton(this),
-        sortByYearButton = new RadioButton(this), sortByYearDescendingButton = new RadioButton(this);
+        RadioButton sortByDateButton = new RadioButton(this), sortByAlphButton = new RadioButton(this), sortByRatingButton = new RadioButton(this), sortByYearButton = new RadioButton(this);
 
         sortByAlphButton.setText(R.string.alph_sort_1);
         sortByDateButton.setText(R.string.date_sort_1);
         sortByRatingButton.setText(R.string.rating_sort_1);
         sortByYearButton.setText(R.string.year_sort_1);
-        sortByAlphDescendingButton.setText(R.string.alph_sort_2);
-        sortByDateDescendingButton.setText(R.string.date_sort_2);
-        sortByRatingDescendingButton.setText(R.string.rating_sort_2);
-        sortByYearDescendingButton.setText(R.string.year_sort_2);
 
         group.addView(sortByAlphButton);
         group.addView(sortByDateButton);
         group.addView(sortByRatingButton);
         group.addView(sortByYearButton);
-        group.addView(sortByAlphDescendingButton);
-        group.addView(sortByDateDescendingButton);
-        group.addView(sortByRatingDescendingButton);
-        group.addView(sortByYearDescendingButton);
 
         new AlertDialog.Builder(this).setView(group).setPositiveButton("Ok", (dialog, which) -> {
             if(sortByAlphButton.isChecked()) {
-                sortByAlphabet(true);
+                sortByAlphabet();
             } else if(sortByDateButton.isChecked()){
-                sortByDate(true);
+                sortByDate();
             } else if(sortByRatingButton.isChecked()){
-                sortByRating(false);
-            } else if(sortByAlphDescendingButton.isChecked()) {
-                sortByAlphabet(false);
-            } else if(sortByDateDescendingButton.isChecked()) {
-                sortByDate(false);
-            } else if(sortByYearDescendingButton.isChecked()) {
-                sortByRating(true);
-            } else if(sortByYearButton.isChecked()) {
-                sortByYear(false);
+                sortByRating();
             } else {
-                sortByYear(true);
+                sortByYear();
             }
         }).show();
     }
 
-    private void sortByDate(boolean reverse) {
+    private void sortByDate() {
         Collections.sort(movies, (o1, o2) -> {
             if(o1.getDate() > o2.getDate()) {
                 return 1;
@@ -161,21 +157,15 @@ public class NextToWatchActivity extends AppCompatActivity {
             }
             return 0;
         });
-        if(reverse) {
-            Collections.reverse(movies);
-        }
         setRecView(movies, "");
     }
 
-    private void sortByAlphabet(boolean reverse) {
+    private void sortByAlphabet() {
         Collections.sort(movies, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
         setRecView(movies, "");
-        if(reverse) {
-            Collections.reverse(movies);
-        }
     }
 
-    private void sortByRating(boolean reverse) {
+    private void sortByRating() {
         Collections.sort(movies, (o1, o2) -> {
             if(o1.getRating() > o2.getRating()) {
                 return 1;
@@ -184,13 +174,10 @@ public class NextToWatchActivity extends AppCompatActivity {
             }
             return 0;
         });
-        if(reverse) {
-            Collections.reverse(movies);
-        }
         setRecView(movies, "");
     }
 
-    private void sortByYear(boolean reverse) {
+    private void sortByYear() {
         Collections.sort(movies, (o1, o2) -> {
             if(o1.getYear() > o2.getYear()) {
                 return 1;
@@ -199,9 +186,6 @@ public class NextToWatchActivity extends AppCompatActivity {
             }
             return 0;
         });
-        if(reverse) {
-            Collections.reverse(movies);
-        }
         setRecView(movies, "");
     }
 
@@ -212,7 +196,7 @@ public class NextToWatchActivity extends AppCompatActivity {
         } else {
             ArrayList <Movie> correctMovies = new ArrayList<>();
             if(pref.equals("")) {
-                MoviesListViewAdapter adapter = new MoviesListViewAdapter(this, movies, getLayoutInflater());
+                MoviesListViewAdapter adapter = new MoviesListViewAdapter(this, movies, getLayoutInflater(), mode);
                 binding.movieRecView.setAdapter(adapter);
             } else {
                 for (Movie movie:movies) {
@@ -220,7 +204,7 @@ public class NextToWatchActivity extends AppCompatActivity {
                         correctMovies.add(movie);
                     }
                 }
-                MoviesListViewAdapter adapter = new MoviesListViewAdapter(this, correctMovies, getLayoutInflater());
+                MoviesListViewAdapter adapter = new MoviesListViewAdapter(this, correctMovies, getLayoutInflater(), mode);
                 binding.movieRecView.setAdapter(adapter);
             }
             moviesReady = true;
@@ -231,13 +215,13 @@ public class NextToWatchActivity extends AppCompatActivity {
 
         DatabaseReference reference
                 = FirebaseDatabase.getInstance().getReference().child("Users")
-                .child(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("name", "")).child("to_watch");
+                .child(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("name", "")).child(mode);
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-                    if(!Objects.equals(dataSnapshot.getKey(), "password") && !Objects.equals(dataSnapshot.getKey(), "watched")) {
+                    if(!Objects.equals(dataSnapshot.getKey(), "password")) {
                         movies.add(dataSnapshot.getValue(Movie.class));
                     }
                 }

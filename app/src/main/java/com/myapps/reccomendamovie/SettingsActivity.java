@@ -3,7 +3,6 @@ package com.myapps.reccomendamovie;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
@@ -71,7 +70,6 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             ListPreference listPreference = findPreference("language");
-            listPreference.setDefaultValue(getLocale().equals("Русский")?"ru":"en");
             listPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 setLocale(newValue.toString().equals("Русский")?"ru":"en");
                 Toast.makeText(getActivity(), R.string.changes_accepted, Toast.LENGTH_SHORT).show();
@@ -90,12 +88,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void setLocale(String lang) {
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            getActivity().getResources().updateConfiguration(config,
-                    getActivity().getResources().getDisplayMetrics());
+            LocaleHelper.setLocale(getContext(), lang);
+
+            SharedPreferences preferences = getContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("language", lang);
+            editor.apply();
         }
     }
 }

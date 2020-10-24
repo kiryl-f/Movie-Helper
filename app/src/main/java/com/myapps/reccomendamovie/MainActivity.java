@@ -152,16 +152,19 @@ public class MainActivity extends AppCompatActivity {
 
         bottomSheetFragment = new BottomSheetFragment();
 
-        binding.bottomNav.setSelectedItemId(R.id.moviesItem);
+        binding.bottomNav.setSelected(true);
+
         binding.bottomNav.setOnNavigationItemSelectedListener(item -> {
             if(item.getItemId() == R.id.nextToWatchItem) {
-                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class));
+                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class).putExtra("mode", "to_watch"));
             } else if(item.getItemId() == R.id.moviesItem) {
                 finish();
             } else if(item.getItemId() == R.id.filterItem) {
                 if(moviesReady) {
                     showBottomSheet();
                 }
+            } else {
+                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class).putExtra("mode", "watched"));
             }
             return false;
         });
@@ -244,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMovies() {
-        String s = Locale.getDefault().getLanguage().equals("ru")?"ru":"en";
+        String s = getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", Locale.getDefault().getLanguage()).equals("ru")?"ru":"en";
         String path = "films_" +  s;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(path);
 

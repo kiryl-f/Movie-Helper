@@ -4,20 +4,27 @@
 
     <item
         android:id="@+id/moviesItem"
-        android:title="@string/exit"
+        android:title=" "
         android:icon="@drawable/ic_baseline_exit_to_app_24"
         />
 
     <item
         android:id="@+id/filterItem"
-        android:title="@string/filter"
+        android:title=" "
         android:icon="@drawable/ic_baseline_search_24"/>
 
     <item
         android:id="@+id/nextToWatchItem"
-        android:title="@string/next_to_watch"
+        android:title=" "
         android:icon="@drawable/ic_baseline_folder_special_24"
         app:showAsAction="always"
         />
+
+    <item
+        android:id="@+id/watchedItem"
+        android:title=" "
+        android:icon="@drawable/ic_baseline_remove_red_eye_24"
+        app:showAsAction="always"/>
+
 
 </menu>

@@ -48,10 +48,10 @@
     <string name="filter">Filter</string>
     <string name="back">Back</string>
     <string name="sort">Sort</string>
-    <string name="alph_sort_1">Alphabet (ascending)</string>
-    <string name="date_sort_1">Date (ascending)</string>
-    <string name="rating_sort_1">Rating (ascending)</string>
-    <string name="year_sort_1">Year(ascending)</string>
+    <string name="alph_sort_1">Alphabet</string>
+    <string name="date_sort_1">Date</string>
+    <string name="rating_sort_1">Rating</string>
+    <string name="year_sort_1">Year</string>
     <string name="alph_sort_2">Alphabet (descending)</string>
     <string name="date_sort_2">Date (descending)</string>
     <string name="rating_sort_2">Rating (descending)</string>
@@ -108,6 +108,8 @@
     <string name="any_country">Any country</string>
     <string name="any_genre">Any genre</string>
     <string name="random_order">In random order</string>
+    <string name="reverse">Reverse</string>
+    <string name="watched1">Watched</string>
 
     <string-array name="languages">
         <item>English</item>

@@ -25,6 +25,7 @@ import com.myapps.reccomendamovie.databinding.ActivityEnterNameBinding;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 public class EnterNameActivity extends AppCompatActivity {
@@ -36,11 +37,13 @@ public class EnterNameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        LocaleHelper.setLocale(this, getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", Locale.getDefault().getLanguage()));
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         binding = ActivityEnterNameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 

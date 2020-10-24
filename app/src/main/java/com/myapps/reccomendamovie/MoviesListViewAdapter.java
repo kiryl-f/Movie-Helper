@@ -47,9 +47,12 @@ public class MoviesListViewAdapter extends BaseAdapter {
 
     private Movie lastMovie = null;
 
-    public MoviesListViewAdapter(Context context, ArrayList<Movie> movies, LayoutInflater inflater) {
+    private String mode = "";
+
+    public MoviesListViewAdapter(Context context, ArrayList<Movie> movies, LayoutInflater inflater, String mode) {
         this.context = context;
         this.movies = movies;
+        this.mode = mode;
     }
 
     @Override
@@ -185,8 +188,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
                         .getReference()
                         .child("Users")
                         .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                                .getString("name", "")).child("to_watch");
-        Log.d("adapter", movies.get(position).getTitle());
+                                .getString("name", "")).child(mode);
         reference.child(movies.get(position).getTitle()).removeValue();
         reference.child(movies.get(position).getTitle() + " ").removeValue();
 
@@ -215,7 +217,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
     private void undo() {
         FirebaseDatabase.getInstance().getReference().child("Users")
                 .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                        .getString("name", "")).child("to_watch").child(lastMovie.getTitle()).setValue(lastMovie);
+                        .getString("name", "")).child(mode).child(lastMovie.getTitle()).setValue(lastMovie);
 
         movies.add(lastMovie);
         this.notifyDataSetChanged();

@@ -19,4 +19,9 @@
         android:title="@string/sort"
         android:icon="@drawable/ic_baseline_sort_24"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/reverseItem"
+        android:title="@string/reverse"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_swap_vert_24"/>
 </menu>
