@@ -12,16 +12,14 @@
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/bottomNav"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:backgroundTint="?attr/tbColor"
         app:itemRippleColor="@android:color/white"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@android:color/white"
-        app:menu="@menu/bottom_nav_menu"
-        >
-    </com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>
+        app:menu="@menu/bottom_nav_menu"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"

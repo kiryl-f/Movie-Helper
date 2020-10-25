@@ -193,6 +193,7 @@ public class NextToWatchActivity extends AppCompatActivity {
         if(movies.size() == 0) {
             binding.movieImage.setVisibility(View.VISIBLE);
             binding.movieText.setVisibility(View.VISIBLE);
+            binding.movieText.setText(getIntent().getStringExtra("text"));
         } else {
             ArrayList <Movie> correctMovies = new ArrayList<>();
             if(pref.equals("")) {

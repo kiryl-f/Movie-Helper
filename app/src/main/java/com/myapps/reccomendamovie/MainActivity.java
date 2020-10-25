@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -32,12 +33,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 import com.myapps.reccomendamovie.databinding.ActivityMainBinding;
 import com.myapps.reccomendamovie.databinding.MovieAttributesDialogBinding;
 import com.wenchao.cardstack.CardStack;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -152,19 +152,21 @@ public class MainActivity extends AppCompatActivity {
 
         bottomSheetFragment = new BottomSheetFragment();
 
-        binding.bottomNav.setSelected(true);
+        binding.bottomNav.setSelectedItemId(R.id.filterItem);
 
         binding.bottomNav.setOnNavigationItemSelectedListener(item -> {
             if(item.getItemId() == R.id.nextToWatchItem) {
-                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class).putExtra("mode", "to_watch"));
+                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class).putExtra("mode", "to_watch").putExtra("text", getString(R.string.no_movie_to_watch)));
             } else if(item.getItemId() == R.id.moviesItem) {
                 finish();
             } else if(item.getItemId() == R.id.filterItem) {
                 if(moviesReady) {
                     showBottomSheet();
                 }
+            } else if(item.getItemId() == R.id.watchedItem) {
+                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class).putExtra("mode", "watched").putExtra("text", getString(R.string.no_movie_watched)));
             } else {
-                startActivity(new Intent(MainActivity.this, NextToWatchActivity.class).putExtra("mode", "watched"));
+                startActivity(new Intent(this, SettingsActivity.class));
             }
             return false;
         });
@@ -572,6 +574,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Nullable
         @Override
+
         public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
             binding = MovieAttributesDialogBinding.inflate(inflater, container, false);
@@ -633,8 +636,8 @@ public class MainActivity extends AppCompatActivity {
             });
 
             ArrayList <String> genres =
-                    new ArrayList<>(Arrays.asList(getString(R.string.any_genre),getString(R.string.drama), getString(R.string.history)
-                            , getString(R.string.thriller), getString(R.string.comedy), getString(R.string.action), getString(R.string.horror), getString(R.string.music), getString(R.string.war), getString(R.string.western), getString(R.string.sci_fi)));
+                    new ArrayList<>(Arrays.asList(getString(R.string.any_genre),getString(R.string.drama), getString(R.string.history), getString(R.string.adventure)
+                            , getString(R.string.thriller), getString(R.string.comedy), getString(R.string.action), getString(R.string.horror), getString(R.string.music), getString(R.string.war), getString(R.string.western), getString(R.string.sci_fi), getString(R.string.animation)));
 
             binding.genreSpinner.setSpinnerTitle(getString(R.string.genre));
             binding.genreSpinner.setSpinnerList(genres);

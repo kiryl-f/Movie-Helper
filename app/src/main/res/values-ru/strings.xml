@@ -115,6 +115,7 @@
     <string name="random_order">В случайном порядке</string>
     <string name="reverse">В обратном порядке</string>
     <string name="watched1">Просмотрено</string>
+    <string name="no_movie_watched">Нет просмотренных фильмов</string>
 
 
 </resources>

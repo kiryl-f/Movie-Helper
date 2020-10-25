@@ -3,12 +3,7 @@ package com.myapps.reccomendamovie;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,22 +16,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.ceylonlabs.imageviewpopup.ImagePopup;
 import com.dmallcott.dismissibleimageview.DismissibleImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -90,6 +76,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
             holder.delete = v.findViewById(R.id.removeImageView);
             holder.share = v.findViewById(R.id.shareImageView);
             holder.progressBar = v.findViewById(R.id.progressBar);
+            holder.main = v.findViewById(R.id.main);
             v.setTag(holder);
         } else {
             holder = (ViewHolder)v.getTag();
@@ -114,7 +101,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         holder.layout.setOnClickListener(v1 -> showPlot(movie.getPlot()));
         holder.delete.setOnClickListener(v12 -> {
             lastMovie = movies.get(position);
-            deleteMovieFromFirebase(position, holder.layout);
+            deleteMovieFromFirebase(position, holder.main);
         });
         double rating = movie.getRating();
         if(rating < 5.0) {
@@ -126,55 +113,22 @@ public class MoviesListViewAdapter extends BaseAdapter {
         }
         holder.rating.setText("" + rating);
 
-
-        Glide.with(context).load(movie.getPosterPath()).listener(new RequestListener<Drawable>() {
+        Picasso.get().load(movie.getPosterPath()).into(holder.poster, new Callback() {
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            public void onSuccess() {
                 holder.progressBar.setVisibility(View.GONE);
-                //holder.share.setOnClickListener(v1 -> share(new BitmapFactory.decoder, movie.getTitle()));
-                return false;
             }
-        }).into(holder.poster);
 
+            @Override
+            public void onError(Exception e) {
 
-        final ImagePopup imagePopup = new ImagePopup(context);
-        imagePopup.setFullScreen(false); // Optional
-        imagePopup.setHideCloseIcon(true);  // Optional
-        imagePopup.setImageOnClickClose(true);  // Optional
+            }
+        });
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+        animation.setDuration(150);
 
-        imagePopup.initiatePopupWithGlide(movie.getPosterPath());
-
+        v.startAnimation(animation);
         return v;
-    }
-
-    private void share(Bitmap bitmap, String title) {
-
-        Uri bmpUri = null;
-        File file = new File("share_image_" + System.currentTimeMillis() + ".png");
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Will fail for API >= 24, better to use FileProvider
-        bmpUri = Uri.fromFile(file);
-
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, title);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-        shareIntent.setType("image/jpeg");
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        context.startActivity(Intent.createChooser(shareIntent, "Share images..."));
-
     }
 
     private void showPlot(String plot) {
@@ -192,19 +146,29 @@ public class MoviesListViewAdapter extends BaseAdapter {
         reference.child(movies.get(position).getTitle()).removeValue();
         reference.child(movies.get(position).getTitle() + " ").removeValue();
 
-        final Animation animation = AnimationUtils.loadAnimation(view.getContext(), R.anim.fade_in);
-        view.startAnimation(animation);
-        Handler handle = new Handler();
-        handle.postDelayed(() -> {
-            movies.remove(position);
-            notifyDataSetChanged();
-            animation.cancel();
-        }, 300);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_right); animation.setDuration(150);
+        Animation.AnimationListener listener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
-        //movies.remove(position);
-        //notifyDataSetChanged();
-        
-        createSnackbar(view);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                movies.remove(position);
+                notifyDataSetChanged();
+                createSnackbar(view);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
+        animation.setAnimationListener(listener);
+
+        view.startAnimation(animation);
+
     }
 
     private void createSnackbar(View view) {
@@ -227,7 +191,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         DismissibleImageView poster;
         ImageView delete, share;
         TextView title, year, genre, country, rating;
-        RelativeLayout layout;
+        RelativeLayout layout, main;
         ProgressBar progressBar;
     }
 }
