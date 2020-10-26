@@ -133,6 +133,7 @@
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_alignTop="@id/bottomNav"
+        android:layout_below="@id/RL"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="50dp"/>
+        android:layout_marginEnd="120dp"/>
 </RelativeLayout>

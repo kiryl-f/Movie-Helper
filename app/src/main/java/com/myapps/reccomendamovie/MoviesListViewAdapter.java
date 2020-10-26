@@ -124,10 +124,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
 
             }
         });
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-        animation.setDuration(150);
 
-        v.startAnimation(animation);
         return v;
     }
 
@@ -146,44 +143,30 @@ public class MoviesListViewAdapter extends BaseAdapter {
         reference.child(movies.get(position).getTitle()).removeValue();
         reference.child(movies.get(position).getTitle() + " ").removeValue();
 
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_out_right); animation.setDuration(150);
-        Animation.AnimationListener listener = new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                movies.remove(position);
-                notifyDataSetChanged();
-                createSnackbar(view);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        };
-        animation.setAnimationListener(listener);
-
-        view.startAnimation(animation);
+        movies.remove(position);
+        notifyDataSetChanged();
+        createSnackbar(view);
 
     }
 
     private void createSnackbar(View view) {
         Snackbar.make(view, R.string.movie_deleted, Snackbar.LENGTH_LONG).setAction(R.string.undo, v ->  {
             Log.d("adapter", "undo");
-            undo();
+            undo(view);
         }).show();
     }
 
-    private void undo() {
+    private void undo(View view) {
         FirebaseDatabase.getInstance().getReference().child("Users")
                 .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
                         .getString("name", "")).child(mode).child(lastMovie.getTitle()).setValue(lastMovie);
 
         movies.add(lastMovie);
+
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
+        animation.setDuration(150);
+        view.startAnimation(animation);
+
         this.notifyDataSetChanged();
     }
 

@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="?attr/bgColor"
     android:id="@+id/main"
+    android:theme="@style/DarkTheme"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
@@ -101,6 +102,15 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_share_24"
         android:layout_below="@id/removeImageView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        />
+    <ImageView
+        android:id="@+id/watchedImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_remove_red_eye_35"
+        android:layout_below="@id/shareImageView"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         />
