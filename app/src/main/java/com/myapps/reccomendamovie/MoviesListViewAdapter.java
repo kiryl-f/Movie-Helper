@@ -3,7 +3,12 @@ package com.myapps.reccomendamovie;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,12 +79,22 @@ public class MoviesListViewAdapter extends BaseAdapter {
             holder.rating = v.findViewById(R.id.ratingTextView);
             holder.layout = v.findViewById(R.id.movieInfoRL);
             holder.delete = v.findViewById(R.id.removeImageView);
+            holder.watched = v.findViewById(R.id.watchedImageView);
             holder.share = v.findViewById(R.id.shareImageView);
             holder.progressBar = v.findViewById(R.id.progressBar);
             holder.main = v.findViewById(R.id.main);
             v.setTag(holder);
         } else {
             holder = (ViewHolder)v.getTag();
+        }
+
+        if(mode.equals("watched")) {
+            holder.watched.setVisibility(View.GONE);
+        } else {
+            holder.watched.setOnClickListener(v2 -> {
+                addToWatched(position);
+                deleteMovieFromFirebase(position, holder.main);
+            });
         }
         holder.title.setText(movie.getTitle());
         holder.year.setText("" + movie.getYear());
@@ -113,6 +128,10 @@ public class MoviesListViewAdapter extends BaseAdapter {
         }
         holder.rating.setText("" + rating);
 
+        holder.share.setOnClickListener(v1 -> {
+            share(holder.poster);
+        });
+
         Picasso.get().load(movie.getPosterPath()).into(holder.poster, new Callback() {
             @Override
             public void onSuccess() {
@@ -126,6 +145,27 @@ public class MoviesListViewAdapter extends BaseAdapter {
         });
 
         return v;
+    }
+
+    private void share(ImageView imageView) {
+        BitmapDrawable bitmapDrawable = ((BitmapDrawable) imageView.getDrawable());
+        Bitmap bitmap = bitmapDrawable .getBitmap();
+        String bitmapPath = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,"some title", null);
+        Uri bitmapUri = Uri.parse(bitmapPath);
+        Intent shareIntent=new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/jpeg");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+        context.startActivity(Intent.createChooser(shareIntent,"Share Image"));
+    }
+
+    private void addToWatched(int position) {
+        DatabaseReference reference =
+                FirebaseDatabase.getInstance()
+                        .getReference()
+                        .child("Users")
+                        .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                                .getString("name", "")).child("watched").child(movies.get(position).getTitle());
+        reference.setValue(movies.get(position));
     }
 
     private void showPlot(String plot) {
@@ -172,7 +212,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
 
     static class ViewHolder {
         DismissibleImageView poster;
-        ImageView delete, share;
+        ImageView delete, share, watched;
         TextView title, year, genre, country, rating;
         RelativeLayout layout, main;
         ProgressBar progressBar;

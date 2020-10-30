@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="?attr/bgColor"
     android:id="@+id/main"
-    android:theme="@style/DarkTheme"
+    tools:theme="@style/DarkTheme"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/posterRL"
-        android:layout_toStartOf="@id/removeImageView"
+        android:layout_toStartOf="@id/shareImageView"
         >
         <TextView
             android:id="@+id/titleTextView"
@@ -91,7 +91,7 @@
         android:id="@+id/removeImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
         android:src="@drawable/ic_baseline_delete_24"
@@ -101,9 +101,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_share_24"
-        android:layout_below="@id/removeImageView"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
+        android:layout_below="@id/removeImageView"
         />
     <ImageView
         android:id="@+id/watchedImageView"

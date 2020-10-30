@@ -142,13 +142,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
         setMoviesToWatch();
-        setWatchedMovies();
-
 
         //loadMoviesTask = new LoadMoviesTask(movies, getApplicationContext());
         //loadMoviesTask.execute();
-
-        loadMovies();
 
         bottomSheetFragment = new BottomSheetFragment();
 
@@ -249,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMovies() {
+        Log.d("to_watch", moviesToWatchTitles.toString());
         String s = getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", Locale.getDefault().getLanguage()).equals("ru")?"ru":"en";
         String path = "films_" +  s;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(path);
@@ -258,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
                     Movie movie = dataSnapshot.getValue(Movie.class);
-                    if(movie != null && movie.getRating() != 0.0 && movie.getTitle().length() > 0) {
+                    if(movie != null && movie.getRating() != 0.0 && movie.getTitle().length() > 0 && Collections.frequency(moviesToWatchTitles, movie.getTitle()) == 0) {
                         movies.add(movie);
                     }
                 }
@@ -339,17 +336,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMoviesToWatch() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(getName());
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users").child(getName()).child("to_watch");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-                    if(!Objects.equals(dataSnapshot.getKey(), "password")) {
-                        moviesToWatchTitles.add(Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle());
-                    }
+                    moviesToWatchTitles.add(Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle().trim());
                 }
+                setWatchedMovies();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -363,9 +358,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-                    moviesToWatchTitles.add(Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle());
+                    moviesToWatchTitles.add(Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle().trim());
                     Log.d("to_watch", Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle());
                 }
+                loadMovies();
             }
 
             @Override
@@ -484,7 +480,6 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter.setMovies(movies);
         binding.swipeStack.setAdapter(adapter);
-
     }
 
     public void findMovie(int sortMode) {
@@ -751,8 +746,8 @@ public class MainActivity extends AppCompatActivity {
 
                     ArrayList <String> movieGenres = new ArrayList<>(), movieCountries = new ArrayList<>();
                     String movieTitle, language;
-                    Integer year;
-                    Double rating;
+                    int year;
+                    double rating;
 
                     JSONArray genres = response.getJSONArray("genres");
 

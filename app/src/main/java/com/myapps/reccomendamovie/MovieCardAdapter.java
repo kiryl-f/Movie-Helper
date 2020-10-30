@@ -65,18 +65,6 @@ public class MovieCardAdapter extends ArrayAdapter<Movie> {
             }
         }).into(((ImageView)convertView.findViewById(R.id.posterImageView)));
 
-        /*Picasso.get().load(getItem(position).getPosterPath()).into(((ImageView) convertView.findViewById(R.id.posterImageView)), new Callback() {
-            @Override
-            public void onSuccess() {
-                convertView.findViewById(R.id.progressBar).setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });*/
-
         ((TextView)convertView.findViewById(R.id.titleTextView)).setText(Objects.requireNonNull(getItem(position)).getTitle());
         ((TextView)convertView.findViewById(R.id.yearTextView)).setText("" + getItem(position).getYear());
 
