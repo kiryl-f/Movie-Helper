@@ -4,11 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +89,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         } else {
             holder.watched.setOnClickListener(v2 -> {
                 addToWatched(position);
-                deleteMovieFromFirebase(position, holder.main);
+                deleteMovieFromFirebase(position, holder.main, false);
             });
         }
         holder.title.setText(movie.getTitle());
@@ -116,7 +112,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         holder.layout.setOnClickListener(v1 -> showPlot(movie.getPlot()));
         holder.delete.setOnClickListener(v12 -> {
             lastMovie = movies.get(position);
-            deleteMovieFromFirebase(position, holder.main);
+            deleteMovieFromFirebase(position, holder.main, true);
         });
         double rating = movie.getRating();
         if(rating < 5.0) {
@@ -129,7 +125,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         holder.rating.setText("" + rating);
 
         holder.share.setOnClickListener(v1 -> {
-            share(holder.poster);
+            share(movie);
         });
 
         Picasso.get().load(movie.getPosterPath()).into(holder.poster, new Callback() {
@@ -147,15 +143,14 @@ public class MoviesListViewAdapter extends BaseAdapter {
         return v;
     }
 
-    private void share(ImageView imageView) {
-        BitmapDrawable bitmapDrawable = ((BitmapDrawable) imageView.getDrawable());
-        Bitmap bitmap = bitmapDrawable .getBitmap();
-        String bitmapPath = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,"some title", null);
-        Uri bitmapUri = Uri.parse(bitmapPath);
-        Intent shareIntent=new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/jpeg");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
-        context.startActivity(Intent.createChooser(shareIntent,"Share Image"));
+    private void share(Movie movie) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, movie.getTitle() + "\n\n" + movie.getPosterPath());
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        context.startActivity(shareIntent);
     }
 
     private void addToWatched(int position) {
@@ -173,7 +168,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
     }
 
 
-    public void deleteMovieFromFirebase(int position, View view) {
+    public void deleteMovieFromFirebase(int position, View view, boolean createSnackbar) {
         DatabaseReference reference =
                 FirebaseDatabase.getInstance()
                         .getReference()
@@ -185,7 +180,9 @@ public class MoviesListViewAdapter extends BaseAdapter {
 
         movies.remove(position);
         notifyDataSetChanged();
-        createSnackbar(view);
+        if(createSnackbar) {
+            createSnackbar(view);
+        }
 
     }
 

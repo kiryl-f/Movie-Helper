@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,10 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,10 +31,6 @@ import com.google.firebase.database.annotations.NotNull;
 import com.myapps.reccomendamovie.databinding.ActivityMainBinding;
 import com.myapps.reccomendamovie.databinding.MovieAttributesDialogBinding;
 import com.wenchao.cardstack.CardStack;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -62,20 +52,13 @@ public class MainActivity extends AppCompatActivity {
     ArrayList <String> moviesToWatchTitles = new ArrayList<>();
 
     Specifications specifications = new Specifications();
-
-    String imageBaseUrl = "https://image.tmdb.org/t/p/w780";
-
-
     boolean moviesReady = false;
-    String url;
-    //= "https://api.themoviedb.org/3/movie/top_rated?api_key=33d65e0ed0777308653502b72db75fd0&language=en-US&region=RU&page=";
 
     HashMap <String, String> languageMap;
 
     BottomSheetFragment bottomSheetFragment;
 
     boolean rlVisible = true;
-    private LoadMoviesTask loadMoviesTask;
 
     ArrayDeque <Movie> swipedMovies = new ArrayDeque<>();
 
@@ -106,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,11 +96,10 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setChoosenTheme();
+        setChosenTheme();
 
         setGenreMap();
 
-        url = "https://api.themoviedb.org/3/movie/top_rated?api_key=33d65e0ed0777308653502b72db75fd0&language=ru-RU&region=RU&page=";
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -142,9 +123,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         setMoviesToWatch();
-
-        //loadMoviesTask = new LoadMoviesTask(movies, getApplicationContext());
-        //loadMoviesTask.execute();
 
         bottomSheetFragment = new BottomSheetFragment();
 
@@ -228,10 +206,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setChoosenTheme() {
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setChosenTheme() {
         if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("theme", false)) {
             setTheme(R.style.DarkTheme);
-            getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.toolbar_bg));
+            Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getDrawable(R.drawable.toolbar_bg));
         } else {
             setTheme(R.style.LightTheme);
         }
@@ -245,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMovies() {
-        Log.d("to_watch", moviesToWatchTitles.toString());
         String s = getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", Locale.getDefault().getLanguage()).equals("ru")?"ru":"en";
         String path = "films_" +  s;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(path);
@@ -359,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
                     moviesToWatchTitles.add(Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle().trim());
-                    Log.d("to_watch", Objects.requireNonNull(dataSnapshot.getValue(Movie.class)).getTitle());
                 }
                 loadMovies();
             }
@@ -434,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
 
                         filmWatched(movie);
                     }
-                    Log.d("swipes", movie.toString());
+
                     swipedMovies.addLast(movie);
                     if(swipedMovies.size() > 0) {
                         binding.undoImageView.setImageResource(R.drawable.ic_baseline_undo_24);
@@ -570,17 +547,16 @@ public class MainActivity extends AppCompatActivity {
         @Nullable
         @Override
 
-        public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             super.onCreateView(inflater, container, savedInstanceState);
             binding = MovieAttributesDialogBinding.inflate(inflater, container, false);
 
-            setMovieAttributesChoise();
+            setMovieAttributesChoice();
 
             return binding.getRoot();
         }
 
-        private void setMovieAttributesChoise() {
-            final boolean[] valuesSet = {false, false};
+        private void setMovieAttributesChoice() {
             activity.specifications = new Specifications();
 
             genreMap = new HashMap<String, Integer>() {
@@ -627,7 +603,6 @@ public class MainActivity extends AppCompatActivity {
                     activity.specifications.country = " ";
                     activity.specifications.language = " ";
                 }
-                valuesSet[0] = true;
             });
 
             ArrayList <String> genres =
@@ -647,7 +622,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     activity.specifications.genre = 0;
                 }
-                valuesSet[1] = true;
             });
 
             ArrayList <String> sortBy = new ArrayList<>(Arrays.asList(getString(R.string.random_order),getString(R.string.rating_sort_1), getString(R.string.alph_sort_1)));
@@ -693,141 +667,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class LoadMoviesTask extends AsyncTask <Void, Void, Void> {
-
-        private ArrayList<Movie> movies;
-        private RequestQueue requestQueue, detailsRequestQueue;
-
-        public LoadMoviesTask(ArrayList<Movie> movies, Context context) {
-            this.movies = movies;
-            requestQueue = Volley.newRequestQueue(context);
-            detailsRequestQueue = Volley.newRequestQueue(context);
-        }
-
-
-        @Override
-        protected void onCancelled() {
-            onDestroy();
-            super.onCancelled();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            for(int i = 1; i <= 366; i++) {
-                if(isCancelled()) {
-                    break;
-                }
-                final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url+i, null, response -> {
-                    try {
-                        JSONArray results = response.getJSONArray("results");
-                        for(int i1 = 0; i1 < results.length(); i1++) {
-                            if(isCancelled()) {
-                                break;
-                            }
-                            setMovieDetails(results.getJSONObject(i1).getInt("id"));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, error -> {
-
-                });
-                requestQueue.add(request);
-            }
-            return null;
-        }
-
-        private void setMovieDetails(int movieId) {
-            String url = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=33d65e0ed0777308653502b72db75fd0&language=ru-RU";
-            final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
-                try {
-                    Movie movie;
-
-                    ArrayList <String> movieGenres = new ArrayList<>(), movieCountries = new ArrayList<>();
-                    String movieTitle, language;
-                    int year;
-                    double rating;
-
-                    JSONArray genres = response.getJSONArray("genres");
-
-                    int genre1 = 0, genre2 = 0, genre3 = 0;
-
-                    for(int i = 0;i < Math.min(genres.length(), 3);i++) {
-                        JSONObject genre = genres.getJSONObject(i);
-                        if(i == 0) {
-                            genre1 = genre.getInt("id");
-                        } else if(i == 1){
-                            genre2 = genre.getInt("id");
-                        } else {
-                            genre3 = genre.getInt("id");
-                        }
-
-                        movieGenres.add(genre.getString("name"));
-                    }
-
-
-
-                    JSONArray countries = response.getJSONArray("production_countries");
-                    for(int i = 0;i < countries.length();i++) {
-                        JSONObject country = countries.getJSONObject(i);
-                        movieCountries.add(country.getString("name"));
-                    }
-                    movieTitle = response.getString("title");
-                    year = Integer.parseInt(response.getString("release_date").substring(0,4));
-                    rating = response.getDouble("vote_average");
-                    language = response.getString("original_language");
-
-                    movie = new Movie(movieTitle,
-                            imageBaseUrl + response.getString("poster_path"),
-                            language,
-                            response.getString("overview"),
-                            movieGenres,
-                            movieCountries,
-                            year,
-                            rating
-                            );
-                    movie.setGenre1(genre1);
-                    movie.setGenre2(genre2);
-                    movie.setGenre3(genre3);
-                    movies.add(movie);
-                    if(movies.size() == 2027) {
-                        Log.d("loading", "ok");
-                        runOnUiThread(() -> {
-                            Log.d("movie_tag", "ok");
-                            binding.progressBar.setVisibility(View.INVISIBLE);
-                            binding.swipeStack.setVisibility(View.VISIBLE);
-                            binding.filmText.setVisibility(View.VISIBLE);
-                            binding.filmImage.setVisibility(View.VISIBLE);
-                            moviesReady = true;
-                            DatabaseReference database = FirebaseDatabase.getInstance().getReference().child("films_ru");
-                            for(Movie movie1:movies) {
-                                Movie movie2;
-                                movie2 = movie1;
-
-                                String s = movie1.getTitle();
-
-                                s = s.replace(".", "");
-                                s = s.replace("$", "");
-                                s = s.replace("#", "");
-                                s = s.replace("[", "");
-                                s = s.replace("]", "");
-                                //title.replace(0, title.length(), ".");
-                                //Log.d("fire_base",title.toString() + "   :" + s);
-                                movie2.setTitle(s);
-
-                                database.child(movie2.getTitle()).setValue(movie2);
-                            }
-                            //findMovie();
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }, error -> {
-            });
-
-            detailsRequestQueue.add(request);
-        }
-    }
 }
