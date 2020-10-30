@@ -60,6 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
             findPreference("log_out").setOnPreferenceClickListener(preference -> {
                 SharedPreferences preferences = requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
+                editor.remove("name");
                 editor.putBoolean("remember", false);
                 editor.apply();
                 Intent intent = new Intent(getActivity(), EnterNameActivity.class);

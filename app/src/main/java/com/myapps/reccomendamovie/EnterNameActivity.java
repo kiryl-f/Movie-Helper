@@ -194,7 +194,6 @@ public class EnterNameActivity extends AppCompatActivity {
         finish();
     }
 
-
     private void addNameToSharedPrefs(String name) {
         SharedPreferences preferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
