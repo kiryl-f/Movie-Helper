@@ -146,7 +146,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
     private void share(Movie movie) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.movie) + ' ' + movie.getTitle() + ", " + movie.getYear() + "\n\n" + movie.getPosterPath());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.movie) + ' ' + movie.getTitle().trim() + ", " + movie.getYear() + "\n\n" + movie.getPosterPath());
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
