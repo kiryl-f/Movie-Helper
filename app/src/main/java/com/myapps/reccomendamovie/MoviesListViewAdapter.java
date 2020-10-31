@@ -85,7 +85,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         }
 
         if(mode.equals("watched")) {
-            holder.watched.setVisibility(View.GONE);
+            holder.watched.setVisibility(View.INVISIBLE);
         } else {
             holder.watched.setOnClickListener(v2 -> {
                 addToWatched(position);
@@ -109,7 +109,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         genres.deleteCharAt(genres.toString().length()-2);
         holder.genre.setText(genres.toString());
 
-        holder.layout.setOnClickListener(v1 -> showPlot(movie.getPlot()));
+        holder.layout.setOnClickListener(v1 -> showPlot(movie));
         holder.delete.setOnClickListener(v12 -> {
             lastMovie = movies.get(position);
             deleteMovieFromFirebase(position, holder.main, true);
@@ -146,7 +146,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
     private void share(Movie movie) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, movie.getTitle() + "\n\n" + movie.getPosterPath());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.movie) + ' ' + movie.getTitle() + ", " + movie.getYear() + "\n\n" + movie.getPosterPath());
         sendIntent.setType("text/plain");
 
         Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -163,8 +163,8 @@ public class MoviesListViewAdapter extends BaseAdapter {
         reference.setValue(movies.get(position));
     }
 
-    private void showPlot(String plot) {
-        new AlertDialog.Builder(context).setPositiveButton("Ok", (dialog, which) -> {}).setMessage(plot).show();
+    private void showPlot(Movie movie) {
+        new AlertDialog.Builder(context).setPositiveButton("Ok", (dialog, which) -> {}).setTitle(movie.getTitle()).setMessage(movie.getPlot()).show();
     }
 
 

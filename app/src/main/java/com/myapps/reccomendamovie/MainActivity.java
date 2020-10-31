@@ -145,8 +145,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        checkFirstRun();
-
         binding.undoImageView.setOnClickListener(v -> {
             if(moviesReady) {
                 binding.filmText.setVisibility(View.GONE);
@@ -245,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.filmImage.setVisibility(View.VISIBLE);
                 moviesReady = true;
 
-                findMovie(0);
+                findMovie(3);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -459,6 +457,8 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter.setMovies(movies);
         binding.swipeStack.setAdapter(adapter);
+
+        checkFirstRun();
     }
 
     public void findMovie(int sortMode) {
@@ -485,8 +485,22 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return 0;
             });
+        } else if(sortMode == 2){
+            Collections.sort(correctMovies, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
         } else {
-            Collections.sort(movies, (o1, o2) -> o1.getTitle().compareTo(o2.getTitle()));
+            Collections.shuffle(correctMovies);
+
+            int c = 0;
+            for(int i = 0;i < correctMovies.size();i++) {
+                if(correctMovies.get(i).getRating() >= 6.5) {
+                    correctMovies.add(0, correctMovies.get(i));
+                    correctMovies.remove(i+1);
+                    c++;
+                    if(c == 10) {
+                        break;
+                    }
+                }
+            }
         }
         if(correctMovies.size() == 0) {
             binding.filmImage.setVisibility(View.VISIBLE);

@@ -157,6 +157,7 @@ public class NextToWatchActivity extends AppCompatActivity {
             }
             return 0;
         });
+        Collections.reverse(movies);
         setRecView(movies, "");
     }
 
@@ -174,6 +175,7 @@ public class NextToWatchActivity extends AppCompatActivity {
             }
             return 0;
         });
+        Collections.reverse(movies);
         setRecView(movies, "");
     }
 
@@ -186,6 +188,7 @@ public class NextToWatchActivity extends AppCompatActivity {
             }
             return 0;
         });
+        Collections.reverse(movies);
         setRecView(movies, "");
     }
 

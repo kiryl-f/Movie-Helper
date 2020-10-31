@@ -44,23 +44,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/posterRL"
-        android:layout_toStartOf="@id/shareImageView"
         >
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="23sp"
+            android:textSize="25sp"
             tools:text="The Dark Knight"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="25sp"
+            android:autoSizeMinTextSize="15sp"
+            android:ellipsize="end"
             android:textColor="?attr/listViewTextColor"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
             />
         <TextView
             android:id="@+id/yearTextView"
+            android:layout_marginTop="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="18sp"
             tools:text="2008"
             android:textColor="?attr/listViewTextColor"
             android:layout_below="@id/titleTextView"
@@ -72,46 +77,54 @@
             android:layout_below="@id/yearTextView"
             android:textColor="?attr/listViewTextColor"
             android:layout_marginStart="10dp"
-            android:textSize="20sp"
+            android:layout_marginTop="6dp"
+            android:textSize="15sp"
             tools:text="USA"
             />
+
         <TextView
             android:id="@+id/genreTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/regionTextView"
             android:textColor="?attr/listViewTextColor"
             android:layout_marginStart="10dp"
-            android:textSize="20sp"
+            android:layout_below="@id/regionTextView"
+            android:textSize="14sp"
+            android:layout_marginBottom="15dp"
             tools:text="Thriller, Criminal"
+            android:layout_marginTop="6dp"
             />
 
     </RelativeLayout>
+
+
     <ImageView
         android:id="@+id/removeImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
         android:src="@drawable/ic_baseline_delete_24"
+        android:layout_marginBottom="10dp"
+        android:layout_alignBottom="@id/posterRL"
+        android:layout_toStartOf="@id/watchedImageView"
+        />
+
+    <ImageView
+        android:id="@+id/watchedImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_remove_red_eye_35"
+        android:layout_alignBottom="@id/posterRL"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"
         />
     <ImageView
         android:id="@+id/shareImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_share_24"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:layout_below="@id/removeImageView"
-        />
-    <ImageView
-        android:id="@+id/watchedImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_remove_red_eye_35"
-        android:layout_below="@id/shareImageView"
-        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@id/removeImageView"
+        android:layout_alignBottom="@id/posterRL"
+        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         />
 </RelativeLayout>

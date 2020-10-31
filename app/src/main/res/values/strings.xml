@@ -111,6 +111,7 @@
     <string name="reverse">Reverse</string>
     <string name="watched1">Watched</string>
     <string name="no_movie_watched">No movies watched</string>
+    <string name="movie">Movie</string>
 
     <string-array name="languages">
         <item>English</item>
