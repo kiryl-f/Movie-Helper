@@ -3,9 +3,7 @@ package com.myapps.reccomendamovie;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
-import android.graphics.drawable.Icon;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.myapps.reccomendamovie.databinding.ActivityEnterNameBinding;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -43,7 +40,6 @@ public class EnterNameActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding = ActivityEnterNameBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
@@ -82,24 +78,13 @@ public class EnterNameActivity extends AppCompatActivity {
             }
         });
         binding.confirmNameButton.setOnClickListener(v -> {
-            setAllViewsEnabled(false);
-            checkEditText();
+            if(!isNetworkConnected()) {
+                makeToast(getString(R.string.no_connection));
+            } else {
+                setAllViewsEnabled(false);
+                checkEditText();
+            }
         });
-    }
-
-    private void createShortcuts() {
-        ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-
-        ShortcutInfo.Builder mainShortcut
-                = new ShortcutInfo.Builder(this, "main").setIcon(Icon.createWithResource(this, R.drawable.ic_baseline_movie_24))
-                .setShortLabel(getString(R.string.movies))
-                .setIntent(new Intent(EnterNameActivity.this, MainActivity.class).setAction(Intent.ACTION_VIEW));
-        ShortcutInfo.Builder nextToWatchShortcut = new ShortcutInfo.Builder(this, "to_watch")
-                .setShortLabel(getString(R.string.next_to_watch))
-                .setIcon(Icon.createWithResource(this, R.drawable.ic_baseline_local_movies_black))
-                .setIntent(new Intent(EnterNameActivity.this, MainActivity.class).setAction(Intent.ACTION_VIEW).putExtra("start_ntw", true));
-        Objects.requireNonNull(shortcutManager).setDynamicShortcuts(Arrays.asList(mainShortcut.build(), nextToWatchShortcut.build()));
-
     }
 
     private void setAllViewsEnabled(boolean enabled) {
@@ -113,7 +98,6 @@ public class EnterNameActivity extends AppCompatActivity {
 
     private void checkIfRemembered() {
         if(getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("remember", false)) {
-            createShortcuts();
             startMainActivity();
         }
     }
@@ -245,5 +229,11 @@ public class EnterNameActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return Objects.requireNonNull(cm).getActiveNetworkInfo() != null && Objects.requireNonNull(cm.getActiveNetworkInfo()).isConnected();
     }
 }

@@ -64,30 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     HashMap <String, Integer> genreMap;
 
-    private void setGenreMap() {
-        genreMap = new HashMap<String, Integer>() {
-            {
-                put(getString(R.string.action), 28);
-                put(getString(R.string.adventure), 12);
-                put(getString(R.string.animation), 16);
-                put(getString(R.string.comedy), 35);
-                put(getString(R.string.crime), 80);
-                put(getString(R.string.documentary), 99);
-                put(getString(R.string.drama), 18);
-                put(getString(R.string.family), 10751);
-                put(getString(R.string.fantasy), 14);
-                put(getString(R.string.history), 36);
-                put(getString(R.string.horror), 27);
-                put(getString(R.string.music), 10402);
-                put(getString(R.string.mystery), 9648);
-                put(getString(R.string.romance), 10749);
-                put(getString(R.string.sci_fi), 878);
-                put(getString(R.string.thriller), 53);
-                put(getString(R.string.war), 10752);
-                put(getString(R.string.western), 37);
-            }
-        };
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +181,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
+    }
+
+    private void setGenreMap() {
+        genreMap = new HashMap<String, Integer>() {
+            {
+                put(getString(R.string.action), 28);
+                put(getString(R.string.adventure), 12);
+                put(getString(R.string.animation), 16);
+                put(getString(R.string.comedy), 35);
+                put(getString(R.string.crime), 80);
+                put(getString(R.string.documentary), 99);
+                put(getString(R.string.drama), 18);
+                put(getString(R.string.family), 10751);
+                put(getString(R.string.fantasy), 14);
+                put(getString(R.string.history), 36);
+                put(getString(R.string.horror), 27);
+                put(getString(R.string.music), 10402);
+                put(getString(R.string.mystery), 9648);
+                put(getString(R.string.romance), 10749);
+                put(getString(R.string.sci_fi), 878);
+                put(getString(R.string.thriller), 53);
+                put(getString(R.string.war), 10752);
+                put(getString(R.string.western), 37);
+            }
+        };
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
