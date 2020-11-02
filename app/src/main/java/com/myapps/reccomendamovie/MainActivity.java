@@ -22,6 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
     HashMap <String, Integer> genreMap;
 
-
+    InterstitialAd interstitialAd;
+    long adCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
         runNtwActivity();
         binding.swipeStack.setContentResource(R.layout.movie_card);
 
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             showNoConnectionMessage();
         }
 
+        iniAds();
         languageMap = new HashMap<String, String>() {
             {
                 put(getString(R.string.usa), "en");
@@ -179,6 +185,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
+    }
+
+    private void iniAds() {
+        MobileAds.initialize(this, initializationStatus -> {
+            loadAd();
+        });
+    }
+
+    private void loadAd() {
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     private void setGenreMap() {
@@ -417,6 +435,12 @@ public class MainActivity extends AppCompatActivity {
                         binding.undoImageView.setImageResource(R.drawable.ic_baseline_undo_24);
                         binding.undoImageView.setClickable(true);
                         binding.undoImageView.setEnabled(true);
+                    }
+
+                    adCount++;
+                    if(adCount % 15 == 0) {
+                        interstitialAd.show();
+                        loadAd();
                     }
                 }
             }

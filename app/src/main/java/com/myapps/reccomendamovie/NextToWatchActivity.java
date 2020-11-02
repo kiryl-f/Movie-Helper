@@ -1,5 +1,6 @@
 package com.myapps.reccomendamovie;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class NextToWatchActivity extends AppCompatActivity {
 
     String mode = "";
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class NextToWatchActivity extends AppCompatActivity {
 
         if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("theme", false)) {
             setTheme(R.style.DarkTheme);
-            getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.toolbar_bg));
+            Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getDrawable(R.drawable.toolbar_bg));
         } else {
             setTheme(R.style.LightTheme);
         }

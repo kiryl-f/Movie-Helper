@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_undo_transparent_24"
             android:layout_marginStart="10dp"
-            />
+            tools:ignore="ContentDescription" />
         <ImageView
             android:id="@+id/thumbUpImageView"
             android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
             android:src="@drawable/thumb_up"
             android:layout_toEndOf="@id/eyeImageView"
             android:layout_marginStart="45dp"
-            />
+            tools:ignore="ContentDescription" />
         <ImageView
             android:id="@+id/thumbDownImageView"
             android:layout_width="wrap_content"
@@ -83,13 +83,14 @@
             android:src="@drawable/thumb_down"
             android:layout_marginEnd="45dp"
             android:layout_toStartOf="@id/eyeImageView"
-            />
+            tools:ignore="ContentDescription" />
         <ImageView
             android:id="@+id/eyeImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/eye"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            tools:ignore="ContentDescription" />
     </RelativeLayout>
 
     <ImageView
@@ -100,7 +101,7 @@
         android:layout_above="@id/bottomNav"
         android:layout_marginBottom="8dp"
         android:layout_alignParentEnd="true"
-        />
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/filmImage"
@@ -110,7 +111,7 @@
         android:src="@drawable/ic_baseline_local_movies_24"
         android:elevation="20dp"
         android:visibility="invisible"
-        />
+        tools:ignore="ContentDescription" />
     <TextView
         android:id="@+id/filmText"
         android:layout_width="wrap_content"

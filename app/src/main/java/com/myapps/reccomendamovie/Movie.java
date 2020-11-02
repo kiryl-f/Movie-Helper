@@ -1,7 +1,5 @@
 package com.myapps.reccomendamovie;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -160,7 +158,6 @@ public class Movie implements Comparable<Movie> {
         }
 
         if(this.getYear() != 0) {
-            Log.d("years", "" + this.getYear() + ',' + movie.getYear());
             if(this.getYear() > movie.getYear()) {
                 return false;
             }

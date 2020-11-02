@@ -5,12 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -34,7 +31,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
 
     private Movie lastMovie = null;
 
-    private String mode = "";
+    private String mode;
 
     public MoviesListViewAdapter(Context context, ArrayList<Movie> movies, LayoutInflater inflater, String mode) {
         this.context = context;
@@ -124,9 +121,7 @@ public class MoviesListViewAdapter extends BaseAdapter {
         }
         holder.rating.setText("" + rating);
 
-        holder.share.setOnClickListener(v1 -> {
-            share(movie);
-        });
+        holder.share.setOnClickListener(v1 -> share(movie));
 
         Picasso.get().load(movie.getPosterPath()).into(holder.poster, new Callback() {
             @Override
@@ -188,21 +183,16 @@ public class MoviesListViewAdapter extends BaseAdapter {
 
     private void createSnackbar(View view) {
         Snackbar.make(view, R.string.movie_deleted, Snackbar.LENGTH_LONG).setAction(R.string.undo, v ->  {
-            Log.d("adapter", "undo");
-            undo(view);
+            undo();
         }).show();
     }
 
-    private void undo(View view) {
+    private void undo() {
         FirebaseDatabase.getInstance().getReference().child("Users")
                 .child(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
                         .getString("name", "")).child(mode).child(lastMovie.getTitle()).setValue(lastMovie);
 
         movies.add(lastMovie);
-
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_in_right);
-        animation.setDuration(150);
-        view.startAnimation(animation);
 
         this.notifyDataSetChanged();
     }
