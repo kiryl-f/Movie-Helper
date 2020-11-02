@@ -16,7 +16,6 @@ import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
-import java.util.Locale;
 import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -82,10 +81,6 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(getActivity(), R.string.changes_accepted, Toast.LENGTH_SHORT).show();
                 return false;
             });
-        }
-
-        private String getLocale() {
-            return Locale.getDefault().getLanguage();
         }
 
         private void setLocale(String lang) {
