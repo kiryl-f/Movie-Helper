@@ -92,7 +92,12 @@ public class MainActivity extends AppCompatActivity {
             showNoConnectionMessage();
         }
 
-        iniAds();
+        if(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", "en").equals("en")) {
+            setTitle("Movie helper");
+        } else {
+            setTitle("Поиск фильмов");
+        }
+
         languageMap = new HashMap<String, String>() {
             {
                 put(getString(R.string.usa), "en");
@@ -190,12 +195,13 @@ public class MainActivity extends AppCompatActivity {
     private void iniAds() {
         MobileAds.initialize(this, initializationStatus -> {
             loadAd();
+            findMovie(3);
         });
     }
 
     private void loadAd() {
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        interstitialAd.setAdUnitId("ca-app-pub-6532809968895987/4979212985");
         interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
@@ -261,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.filmImage.setVisibility(View.VISIBLE);
                 moviesReady = true;
 
-                findMovie(3);
+                iniAds();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

@@ -74,7 +74,17 @@ public class NextToWatchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mode = intent.getStringExtra("mode");
         if(Objects.equals(mode, "watched")) {
-            setTitle(R.string.watched1);
+            if(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", "en").equals("en")) {
+                setTitle("Watched");
+            } else {
+                setTitle("Просмотрено");
+            }
+        } else {
+            if(getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("language", "en").equals("en")) {
+                setTitle("Next to watch");
+            } else {
+                setTitle("Буду смотреть");
+            }
         }
 
         getDataFromFirebase();
