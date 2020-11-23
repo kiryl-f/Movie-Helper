@@ -88,7 +88,7 @@
 
     <string name="watched">Уже смотрел</string>
 
-    <string name="changes_accepted">Все изменеия будут приняты после перезапуска приложения</string>
+    <string name="changes_accepted">Все изменения будут приняты после перезапуска приложения</string>
 
     <string name="set_spec">Здесь вы можете отфильтровать поиск фильмов</string>
     <string name="list_liked">Здесь вы найдёте список фильмов, которые вы захотели посмотреть</string>

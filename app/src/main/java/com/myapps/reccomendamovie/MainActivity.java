@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -190,12 +191,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
+        AsyncTask.execute(this::iniAds);
     }
 
     private void iniAds() {
         MobileAds.initialize(this, initializationStatus -> {
             loadAd();
-            findMovie(3);
+            //findMovie(3);
         });
     }
 
@@ -267,7 +269,9 @@ public class MainActivity extends AppCompatActivity {
                 binding.filmImage.setVisibility(View.VISIBLE);
                 moviesReady = true;
 
-                iniAds();
+                findMovie(3);
+
+                //iniAds();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
