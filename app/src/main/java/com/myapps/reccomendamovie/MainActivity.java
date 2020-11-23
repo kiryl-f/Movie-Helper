@@ -412,6 +412,7 @@ public class MainActivity extends AppCompatActivity {
         binding.swipeStack.setListener(new CardStack.CardEventListener() {
             @Override
             public boolean swipeEnd(int section, float distance) {
+                resetTextViews();
                 return distance > 100;
             }
 
@@ -422,6 +423,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean swipeContinue(int section, float distanceX, float distanceY) {
+                if(section == 1 || section == 3) {
+                    binding.willWatchTextView.setVisibility(View.VISIBLE);
+                    binding.alreadyWatchedTextView.setVisibility(View.INVISIBLE);
+                    binding.skipTextView.setVisibility(View.INVISIBLE);
+                    binding.willWatchTextView.setAlpha(distanceX/100);
+                } else if(section == 2) {
+                    binding.willWatchTextView.setVisibility(View.INVISIBLE);
+                    binding.alreadyWatchedTextView.setVisibility(View.VISIBLE);
+                    binding.skipTextView.setVisibility(View.INVISIBLE);
+                    binding.alreadyWatchedTextView.setAlpha(distanceX/100);
+                } else {
+                    binding.willWatchTextView.setVisibility(View.INVISIBLE);
+                    binding.alreadyWatchedTextView.setVisibility(View.INVISIBLE);
+                    binding.skipTextView.setVisibility(View.VISIBLE);
+                    binding.skipTextView.setAlpha(distanceX/100);
+                }
                 return true;
             }
 
@@ -452,6 +469,7 @@ public class MainActivity extends AppCompatActivity {
                         interstitialAd.show();
                         loadAd();
                     }
+                    resetTextViews();
                 }
             }
 
@@ -460,6 +478,15 @@ public class MainActivity extends AppCompatActivity {
                 showPlot((Movie) Objects.requireNonNull(binding.swipeStack.getAdapter().getItem(binding.swipeStack.getCurrIndex())));
             }
         });
+    }
+
+    private void resetTextViews() {
+        binding.willWatchTextView.setVisibility(View.INVISIBLE);
+        binding.alreadyWatchedTextView.setVisibility(View.INVISIBLE);
+        binding.skipTextView.setVisibility(View.INVISIBLE);
+        binding.willWatchTextView.setAlpha(1F);
+        binding.alreadyWatchedTextView.setAlpha(1F);
+        binding.skipTextView.setAlpha(1F);
     }
 
     private void saveFilmToFirebase(final Movie movie) {
