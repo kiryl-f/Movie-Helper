@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadAd() {
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId("ca-app-pub-6532809968895987/4979212985");
+        interstitialAd.setAdUnitId("your add id");
         interstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
